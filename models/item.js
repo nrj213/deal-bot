@@ -1,6 +1,12 @@
 const db = require('monk')(process.env.MONGODB_URL);
 
-let trackedItems = db.get('trackedItems');
+let trackedItems = db.get('TrackedItems');
+
+let extractNumericPrice = (price) => {
+    //Removing unit
+    price = price.substring(1, price.length);
+    return parseInt(price.replace(/,/g, ''));
+};
 
 let allItems = () => {
     return new Promise((resolve, reject) => {
@@ -15,11 +21,7 @@ let allItems = () => {
 };
 
 let saveItem = (item) => {
-    let currentPrice = item.price;
-    //Removing unit
-    currentPrice = currentPrice.substring(1, currentPrice.length);
-
-    item.lowestPrice = parseInt(currentPrice.replace(/,/g, ''));
+    item.lowestPrice = extractNumericPrice(item.price);
     item.lowestPriceDate = new Date();
     item.priceLog = [];
 
@@ -43,6 +45,8 @@ let saveItem = (item) => {
 };
 
 let logPrice = (id, price) => {
+    price = extractNumericPrice(price);
+    
     return new Promise((resolve, reject) => {
         trackedItems.findOneAndUpdate({ _id: id }, {
             $push: {

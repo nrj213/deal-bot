@@ -1,1 +1,1 @@
-process.env.MONGODB_URL = 'localhost/dealBot';
+process.env.MONGODB_URL = 'localhost/dealbot';
