@@ -12,8 +12,8 @@ var job = schedule.scheduleJob(rule, () => {
     itemModel.allItems().then((docs) => {
         docs.forEach(doc => {
             flipkartService.processItemPage(doc.link).then((price) => {
-                itemModel.logPrice(doc._id, price).then((doc) => {
-                    console.log('Price logged @ : ' + (new Date()).toTimeString() + " // "+ doc.name + ' - ' + price);
+                itemModel.logPrice(doc, price).then((doc) => {
+                    console.log('Price logged @ ' + (new Date()).toTimeString() + " // "+ doc.name + ' - ' + price);
                 }).catch((err) => {
                     console.log(err);
                 });

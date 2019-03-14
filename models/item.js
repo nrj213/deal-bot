@@ -1,3 +1,4 @@
+const nodemailer = require('nodemailer');
 const db = require('monk')(process.env.MONGODB_URL);
 
 let trackedItems = db.get('TrackedItems');
@@ -6,6 +7,31 @@ let extractNumericPrice = (price) => {
     //Removing unit
     price = price.substring(1, price.length);
     return parseInt(price.replace(/,/g, ''));
+};
+
+let sendNotification = (item) => {
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USERNAME,
+            pass: process.env.EMAIL_PASSWORD
+        }
+    });
+
+    var mailOptions = {
+        from: process.env.EMAIL_USERNAME,
+        to: 'nrj213@gmail.com',
+        subject: 'Sending Email using Node.js',
+        text: 'Price dropped for ' + item.name + '. Price has become ' + item.lowestPrice
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 };
 
 let allItems = () => {
@@ -44,14 +70,19 @@ let saveItem = (item) => {
     });
 };
 
-let logPrice = (id, price) => {
-    price = extractNumericPrice(price);
-    
+let logPrice = (item, currentPrice) => {
+    currentPrice = extractNumericPrice(currentPrice);
+
+    if (currentPrice < item.lowestPrice) {
+        item.lowestPrice = currentPrice;
+        sendNotification(item);
+    }
+
     return new Promise((resolve, reject) => {
-        trackedItems.findOneAndUpdate({ _id: id }, {
+        trackedItems.findOneAndUpdate({ _id: item._id }, {
             $push: {
                 priceLog: {
-                    price: price,
+                    price: currentPrice,
                     date: new Date()
                 }
             }
