@@ -1,5 +1,5 @@
 const express = require('express');
-const flipkartService = require('../services/flipkart-service');
+const flipkartService = require('../services/flipkart');
 
 const router = express.Router();
 

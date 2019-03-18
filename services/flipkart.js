@@ -48,6 +48,7 @@ let processSearchPage = (searchUrl) => {
                 resolve(searchResults);
             })
             .catch(function (err) {
+                console.log('Item search failed: ' + err.message);
                 reject(err);
             });
     });
@@ -63,6 +64,7 @@ let processItemPage = (itemUrl) => {
                 resolve($(_price).text().trim());
             })
             .catch(function (err) {
+                console.log('Price fetching failed: ' + err.message);
                 reject(err);
             });
     });

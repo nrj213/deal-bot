@@ -1,10 +1,10 @@
 const express = require('express');
-const itemModel = require('../models/item');
+const itemService = require('../services/item');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    itemModel.allItems().then((docs) => {
+    itemService.allItems().then((docs) => {
         res.send(docs);
     }).catch((err) => {
         res.send(err);
@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/add', (req, res) => {
-    itemModel.saveItem(req.body).then((doc) => {
+    itemService.saveItem(req.body).then((doc) => {
         res.send(doc);
     }).catch((err) => {
         res.send(err);
@@ -20,7 +20,7 @@ router.post('/add', (req, res) => {
 });
 
 router.delete('/remove/:id', (req, res) => {
-    itemModel.deleteItem(req.params.id).then((doc) => {
+    itemService.deleteItem(req.params.id).then((doc) => {
         res.send(doc);
     }).catch((err) => {
         res.send(err);
