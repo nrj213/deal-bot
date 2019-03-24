@@ -4,9 +4,9 @@ const itemService = require('../services/item');
 const flipkartService = require('./flipkart');
 
 var rule = new schedule.RecurrenceRule();
-rule.hour = 0;
-rule.minute = 0;
-rule.second = 10;
+//rule.hour = 0;
+rule.minute = 1;
+//rule.second = 10;
 
 var job = schedule.scheduleJob(rule, () => {
     itemService.allItems().then((docs) => {

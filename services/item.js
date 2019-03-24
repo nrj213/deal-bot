@@ -1,6 +1,10 @@
 const itemModel = require('../models/item');
 const notification = require('../services/notification');
 
+let extractCurrencyFormat = (price) => {
+    return price.substring(0, 1);
+};
+
 let extractNumericPrice = (price) => {
     //Removing unit
     price = price.substring(1, price.length);
@@ -9,17 +13,20 @@ let extractNumericPrice = (price) => {
 
 let allItems = () => {
     return new Promise((resolve, reject) => {
-        itemModel.find({}, (err, docs) => {
-            if (docs) {
-                resolve(docs);
-            } else {
-                reject(err);
-            }
-        });
+        itemModel.find({},
+            { sort: { _id: -1 } },
+            (err, docs) => {
+                if (docs) {
+                    resolve(docs);
+                } else {
+                    reject(err);
+                }
+            });
     });
 };
 
 let saveItem = (item) => {
+    item.currencyFormat = extractCurrencyFormat(item.price);
     item.price = item.lowestPrice = extractNumericPrice(item.price);
     item.lowestPriceDate = new Date();
     item.priceLog = [];
@@ -56,8 +63,8 @@ let logPrice = (item, currentPrice) => {
     };
 
     if (currentPrice < item.lowestPrice) {
-       updateQuery = {
-            ...updateQuery, 
+        updateQuery = {
+            ...updateQuery,
             $set: {
                 lowestPrice: currentPrice
             }
@@ -65,7 +72,7 @@ let logPrice = (item, currentPrice) => {
         //notification.sendEmail(item);
     } else if (currentPrice > item.lowestPrice) {
         updateQuery = {
-            ...updateQuery, 
+            ...updateQuery,
             $set: {
                 price: currentPrice,
                 lowestPrice: currentPrice

@@ -9,7 +9,7 @@ router.get('/search/:keyword', (req, res) => {
     flipkartService.processSearchPage(searchUrl).then((searchResults) => {
         res.send(searchResults);
     }).catch((err) => {
-        res.send(err);
+        res.status(500).send(err);
     });
 });
 
@@ -19,7 +19,7 @@ router.get('/item', (req, res) => {
     flipkartService.processItemPage(itemUrl).then((price) => {
         res.send(price);
     }).catch((err) => {
-        res.send(err);
+        res.status(500).send(err);
     });
 });
 
