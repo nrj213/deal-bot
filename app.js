@@ -3,30 +3,39 @@ require('./services/scheduler');
 
 const express = require('express');
 const bodyParser = require('body-parser');
-
-// const db = require('monk')(process.env.MONGODB_URL);
+const cors = require('cors');
+const session = require('express-session');
+const mongoose = require('mongoose');
 
 const flipkartRouter = require('./routes/flipkart');
 const itemRouter = require('./routes/item');
+const userRouter = require('./routes/user');
 
 var app = express();
 
 app.use(bodyParser.json());
+app.use(session({ 
+    secret: process.env.SESSION_SECRET, 
+    cookie: { maxAge: 60000 }, 
+    resave: false, 
+    saveUninitialized: false 
+}));
 
-// app.use((req, res, next) => {
-//     req.db = db;
+app.use(cors());
+// app.use(function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 //     next();
 // });
 
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+mongoose.connect(process.env.MONGODB_URL);
+require('./models/user');
+require('./config/passport');
 
 app.use('/flipkart', flipkartRouter);
 app.use('/item', itemRouter);
+app.use('/user', userRouter);
 
 app.listen('3000', () => {
     console.log('Server started!');
