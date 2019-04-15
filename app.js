@@ -40,17 +40,19 @@ app.use('/flipkart', flipkartRouter);
 app.use('/item', itemRouter);
 app.use('/user', userRouter);
 
-// app.listen('3000', () => {
-//     console.log('HTTP Server started!');
-// });
+
 
 const PORT = process.env.PORT;
 
 console.log("Port: " + PORT);
 
-https.createServer({
-    key: fs.readFileSync('./config/ssl/server.key'),
-    cert: fs.readFileSync('./config/ssl/server.crt')
-}, app).listen(PORT, () => {
-    console.log('HTTPS Server started!');
+app.listen(PORT, () => {
+    console.log('HTTP Server started!');
 });
+
+// https.createServer({
+//     key: fs.readFileSync('./config/ssl/server.key'),
+//     cert: fs.readFileSync('./config/ssl/server.crt')
+// }, app).listen(PORT, () => {
+//     console.log('HTTPS Server started!');
+// });
