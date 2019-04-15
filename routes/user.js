@@ -85,7 +85,7 @@ router.get('/current', auth.required, (req, res, next) => {
 router.get('/gdlogin', (req, res) => {
   res.send({
     id: 111,
-    role: ["Moderate", "Basic"]
+    role: ["Moderate", "Basic", "Admin"]
   });
 });
 

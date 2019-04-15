@@ -1,6 +1,9 @@
 require('./config/config');
 require('./services/scheduler');
 
+const https = require('https');
+const fs = require('fs');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -14,11 +17,11 @@ const userRouter = require('./routes/user');
 var app = express();
 
 app.use(bodyParser.json());
-app.use(session({ 
-    secret: process.env.SESSION_SECRET, 
-    cookie: { maxAge: 60000 }, 
-    resave: false, 
-    saveUninitialized: false 
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    cookie: { maxAge: 60000 },
+    resave: false,
+    saveUninitialized: false
 }));
 
 app.use(cors());
@@ -37,6 +40,13 @@ app.use('/flipkart', flipkartRouter);
 app.use('/item', itemRouter);
 app.use('/user', userRouter);
 
-app.listen('3000', () => {
-    console.log('Server started!');
+// app.listen('3000', () => {
+//     console.log('HTTP Server started!');
+// });
+
+https.createServer({
+    key: fs.readFileSync('./config/ssl/server.key'),
+    cert: fs.readFileSync('./config/ssl/server.crt')
+}, app).listen(3000, () => {
+    console.log('HTTPS Server started!');
 });
