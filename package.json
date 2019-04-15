@@ -4,7 +4,7 @@
   "description": "This is a bot which tracks prices of items on e-commerce sites and notifies users when there is a price drop on the watched items. It also provides analytics on item prices over long periods of time.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app",
+    "start": "node app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -25,5 +25,8 @@
     "puppeteer": "^1.13.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }

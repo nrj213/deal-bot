@@ -4,13 +4,13 @@ let sendEmail = (item) => {
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.EMAIL_USERNAME,
-            pass: process.env.EMAIL_PASSWORD
+            user: process.env.EMAIL.UNAME,
+            pass: process.env.EMAIL.PASS
         }
     });
 
     var mailOptions = {
-        from: process.env.EMAIL_USERNAME,
+        from: process.env.EMAIL.UNAME,
         to: 'nrj213@gmail.com',
         subject: 'Sending Email using Node.js',
         text: 'Price dropped for ' + item.name + '. Price has become ' + item.lowestPrice

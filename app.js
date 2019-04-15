@@ -44,9 +44,11 @@ app.use('/user', userRouter);
 //     console.log('HTTP Server started!');
 // });
 
+const PORT = process.env.PORT;
+
 https.createServer({
     key: fs.readFileSync('./config/ssl/server.key'),
     cert: fs.readFileSync('./config/ssl/server.crt')
-}, app).listen(3000, () => {
+}, app).listen(PORT, () => {
     console.log('HTTPS Server started!');
 });
