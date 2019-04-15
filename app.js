@@ -46,6 +46,8 @@ app.use('/user', userRouter);
 
 const PORT = process.env.PORT;
 
+console.log("Port: " + PORT);
+
 https.createServer({
     key: fs.readFileSync('./config/ssl/server.key'),
     cert: fs.readFileSync('./config/ssl/server.crt')
